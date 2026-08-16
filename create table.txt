@@ -1,0 +1,35 @@
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE classrooms (
+    class_id INT AUTO_INCREMENT PRIMARY KEY,
+    class_name VARCHAR(100) NOT NULL,
+    class_password VARCHAR(100) NOT NULL,
+    teacher_id INT NOT NULL,
+    FOREIGN KEY fk_classroom_teacher(teacher_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE enrollments (
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    class_id INT NOT NULL,
+    date_joined DATETIME NOT NULL,
+    FOREIGN KEY fk_enrollment_student(student_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY fk_enrollment_classroom(class_id) REFERENCES classrooms(class_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_enrollment (student_id, class_id)
+);
+
+CREATE TABLE announcements (
+    post_id INT AUTO_INCREMENT PRIMARY KEY,
+    class_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    date_posted DATETIME NOT NULL,
+    FOREIGN KEY fk_announcement_classroom(class_id) REFERENCES classrooms(class_id) ON DELETE CASCADE
+);
+
